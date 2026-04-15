@@ -40,12 +40,12 @@ class ProjectController extends Controller {
         $progress = (int) ($_POST['progress'] ?? 0);
 
         if ($title === '' || $status === '' || $description === '') {
-            echo "Tous les champs sont obligatoires.";
+            Notification::setFlash('error', 'Tous les champs sont obligatoires.');
             return;
         }
 
         if ($progress < 0 || $progress > 100) {
-            echo "La progression doit être comprise entre 0 et 100.";
+            Notification::setFlash('error', 'La progression doit être comprise entre 0 et 100.');
             return;
         }
 
@@ -55,9 +55,11 @@ class ProjectController extends Controller {
             'description' => $description,
             'progress' => $progress
         ])) {
-            echo "Erreur lors de la création du projet.";
+            Notification::setFlash('error', 'Une erreur est survenue lors de la création du projet.');
             return;
         }
+
+        Notification::setFlash('success', 'Projet créé avec succès.');
         header('Location: '. BASE_URL . '/projects');
         exit;
     }
@@ -91,12 +93,12 @@ class ProjectController extends Controller {
         $progress = (int) ($_POST['progress'] ?? 0);
 
         if ($title === '' || $status === '' || $description === '') {
-            echo "Tous les champs sont obligatoires.";
+            Notification::setFlash('error', 'Tous les champs sont obligatoires.');
             return;
         }
 
         if ($progress < 0 || $progress > 100) {
-            echo "La progression doit être comprise entre 0 et 100.";
+            Notification::setFlash('error', 'La progression doit être comprise entre 0 et 100.');
             return;
         }
 
@@ -107,6 +109,7 @@ class ProjectController extends Controller {
             'progress' => $progress
         ]);
 
+        Notification::setFlash('success', 'Projet mis à jour avec succès.');
         header('Location: ' . BASE_URL . '/projects/' . (int) $id);
         exit;
     }
@@ -123,6 +126,7 @@ class ProjectController extends Controller {
 
         $this->projectModel->delete((int) $id);
 
+        Notification::setFlash('success', 'Projet supprimé avec succès.');
         header('Location: ' . BASE_URL . '/projects');
         exit;
     }

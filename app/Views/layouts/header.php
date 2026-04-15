@@ -20,3 +20,18 @@
     </header>
 
     <main class="mx-auto max-w-6xl px-6 py-10">
+        <?php $flash = Notification::getFlash(); ?>
+
+        <?php if ($flash): ?>
+            <?php
+                $flashClasses = $flash['type'] === 'success'
+                    ? 'border-emerald-200 bg-emerald-50 text-emerald-800'
+                    : 'border-red-200 bg-red-50 text-red-800';
+            ?>
+
+            <div class="mb-6 rounded-2xl border px-5 py-4 shadow-sm <?php echo $flashClasses; ?>">
+                <p class="font-medium">
+                    <?php echo htmlspecialchars($flash['message']); ?>
+                </p>
+            </div>
+        <?php endif; ?>
