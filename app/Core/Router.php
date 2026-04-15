@@ -17,22 +17,33 @@ class Router
     private function addRoute(string $method, string $path, callable $action): void
     {
         $path = $this->normalize($path);
-        $this->routes[$method][$path] = $action;
+        $this->routes[$method][] = [
+            'path' => $path,
+            'action' => $action
+        ];
     }
 
     public function dispatch(string $uri, string $method): void
     {
-        $path = $this->normalize($uri);
+        $currentPath = $this->normalize($uri);
 
-        if (!isset($this->routes[$method][$path])) {
-            http_response_code(404);
-            echo "<h1>404</h1>";
-            echo "<p>La page demandée n'existe pas.</p>";
+        if (!isset($this->routes[$method])) {
+            $this->send404();
             return;
         }
 
-        $action = $this->routes[$method][$path];
-        $action();
+        foreach ($this->routes[$method] as $route) {
+            $pattern = preg_replace('#\{[a-zA-Z_][a-zA-Z0-9_]*\}#', '([^/]+)', $route['path']);
+            $pattern = '#^' . $pattern . '$#';
+
+            if (preg_match($pattern, $currentPath, $matches)) {
+                array_shift($matches);
+                call_user_func_array($route['action'], $matches);
+                return;
+            }
+        }
+
+        $this->send404();
     }
 
     private function normalize(string $path): string
@@ -48,5 +59,12 @@ class Router
         $path = '/' . trim($path, '/');
 
         return $path === '//' ? '/' : $path;
+    }
+
+    private function send404(): void
+    {
+        http_response_code(404);
+        echo "<h1>404</h1>";
+        echo "<p>La page demandée n'existe pas.</p>";
     }
 }
