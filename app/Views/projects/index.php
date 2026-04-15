@@ -1,14 +1,21 @@
 <section>
-    <div class="mb-8">
-        <p class="text-sm font-semibold uppercase tracking-wider text-blue-600">
-            Chantiers
-        </p>
-        <h1 class="mt-2 text-3xl font-bold text-slate-900">
-            Liste des chantiers
-        </h1>
-        <p class="mt-3 text-slate-600">
-            Voici quelques projets de démonstration pour la structure de Travo.
-        </p>
+    <div class="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <div>
+            <p class="text-sm font-semibold uppercase tracking-wider text-blue-600">
+                Chantiers
+            </p>
+            <h1 class="mt-2 text-3xl font-bold text-slate-900">
+                Liste des chantiers
+            </h1>
+            <p class="mt-3 text-slate-600">
+                Voici quelques projets de démonstration pour la structure de Travo.
+            </p>
+        </div>
+
+        <a href="<?php echo BASE_URL; ?>/projects/create"
+           class="inline-flex rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700">
+            Nouveau chantier
+        </a>
     </div>
 
     <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">

@@ -27,4 +27,38 @@ class ProjectController extends Controller {
 
         $this->view('projects/show', ['project' => $project]);
     }
+
+    public function create(): void
+    {
+        $this->view('projects/create');
+    }
+
+    function store(): void{
+        $title = trim($_POST['title'] ?? '');
+        $status = trim($_POST['status'] ?? '');
+        $description = trim($_POST['description'] ?? '');
+        $progress = (int) ($_POST['progress'] ?? 0);
+
+        if ($title === '' || $status === '' || $description === '') {
+            echo "Tous les champs sont obligatoires.";
+            return;
+        }
+
+        if ($progress < 0 || $progress > 100) {
+            echo "La progression doit être comprise entre 0 et 100.";
+            return;
+        }
+
+        if(!$this->projectModel->create([
+            'title' => $title,
+            'status' => $status,
+            'description' => $description,
+            'progress' => $progress
+        ])) {
+            echo "Erreur lors de la création du projet.";
+            return;
+        }
+        header('Location: '. BASE_URL . '/projects');
+        exit;
+    }
 }
