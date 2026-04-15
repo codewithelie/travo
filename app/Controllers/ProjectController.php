@@ -34,19 +34,18 @@ class ProjectController extends Controller {
     }
 
     function store(): void{
-        $title = trim($_POST['title'] ?? '');
-        $status = trim($_POST['status'] ?? '');
-        $description = trim($_POST['description'] ?? '');
-        $progress = (int) ($_POST['progress'] ?? 0);
+        $validator = Validator::make($_POST, [
+            'title' => 'required|max:255',
+            'status' => 'required|in:En cours,Terminé,En attente',
+            'description' => 'required',
+            'progress' => 'required|integer|between:0,100'
+        ]);
 
-        if ($title === '' || $status === '' || $description === '') {
-            Notification::setFlash('error', 'Tous les champs sont obligatoires.');
-            return;
-        }
-
-        if ($progress < 0 || $progress > 100) {
-            Notification::setFlash('error', 'La progression doit être comprise entre 0 et 100.');
-            return;
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            Notification::setFlash('error', implode('<br>', $errors));
+            header('Location: ' . BASE_URL . '/projects/create');
+            exit;
         }
 
         if(!$this->projectModel->create([
@@ -56,7 +55,8 @@ class ProjectController extends Controller {
             'progress' => $progress
         ])) {
             Notification::setFlash('error', 'Une erreur est survenue lors de la création du projet.');
-            return;
+            header('Location: ' . BASE_URL . '/projects/create');
+            exit;
         }
 
         Notification::setFlash('success', 'Projet créé avec succès.');
@@ -92,14 +92,18 @@ class ProjectController extends Controller {
         $description = trim($_POST['description'] ?? '');
         $progress = (int) ($_POST['progress'] ?? 0);
 
-        if ($title === '' || $status === '' || $description === '') {
-            Notification::setFlash('error', 'Tous les champs sont obligatoires.');
-            return;
-        }
+        $validator = Validator::make($_POST, [
+            'title' => 'required|max:255',
+            'status' => 'required|in:En cours,Terminé,En attente',
+            'description' => 'required',
+            'progress' => 'required|integer|between:0,100'
+        ]);
 
-        if ($progress < 0 || $progress > 100) {
-            Notification::setFlash('error', 'La progression doit être comprise entre 0 et 100.');
-            return;
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            Notification::setFlash('error', implode('<br>', $errors));
+            header('Location: ' . BASE_URL . '/projects/edit/' . (int) $id);
+            exit;
         }
 
         $this->projectModel->update((int) $id, [
