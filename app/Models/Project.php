@@ -35,4 +35,24 @@ class Project {
             'progress' => $data['progress']
         ]);
     }
+
+    public function update(int $id, array $data): bool
+    {
+        $sql = "UPDATE projects
+                SET title = :title,
+                    status = :status,
+                    description = :description,
+                    progress = :progress
+                WHERE id = :id";
+
+        $stmt = $this->pdo->prepare($sql);
+
+        return $stmt->execute([
+            'id' => $id,
+            'title' => $data['title'],
+            'status' => $data['status'],
+            'description' => $data['description'],
+            'progress' => $data['progress']
+        ]);
+    }
 }

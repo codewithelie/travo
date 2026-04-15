@@ -8,6 +8,10 @@ $router->get('/about', [$homeController, 'about']);
 $router->get('/projects', [$projectController, 'index']);
 $router->get('/projects/create', [$projectController, 'create']); //Afficher le formulaire de création
 $router->post('/projects/store', [$projectController, 'store']); //Ajouter le projet en BDD
+
+$router->get('/projects/{id}/edit', [$projectController, 'edit']);
+$router->post('/projects/{id}/update', [$projectController, 'update']);
+
 $router->get('/projects/{id}', [$projectController, 'show']);
 
 

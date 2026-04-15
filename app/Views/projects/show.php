@@ -46,10 +46,15 @@
         </div>
     </div>
 
-    <div>
-        <a href="<?php echo BASE_URL . '/projects' ?>"
-           class="inline-flex rounded-xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-700">
+    <div class="flex flex-wrap gap-4">
+        <a href="<?php echo BASE_URL; ?>/projects"
+        class="inline-flex rounded-xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-700">
             Retour à la liste
+        </a>
+
+        <a href="<?php echo BASE_URL; ?>/projects/<?php echo (int) $project['id']; ?>/edit"
+        class="inline-flex rounded-xl bg-amber-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-amber-600">
+            Modifier le projet
         </a>
     </div>
 </section>

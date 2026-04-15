@@ -61,4 +61,53 @@ class ProjectController extends Controller {
         header('Location: '. BASE_URL . '/projects');
         exit;
     }
+
+    public function edit($id): void
+    {
+        $project = $this->projectModel->getById((int) $id);
+
+        if (!$project) {
+            http_response_code(404);
+            echo "<h1>Projet introuvable</h1>";
+            return;
+        }
+
+        $this->view('projects/edit', ['project' => $project]);
+    }
+
+    public function update($id): void
+    {
+        $project = $this->projectModel->getById((int) $id);
+
+        if (!$project) {
+            http_response_code(404);
+            echo "<h1>Projet introuvable</h1>";
+            return;
+        }
+
+        $title = trim($_POST['title'] ?? '');
+        $status = trim($_POST['status'] ?? '');
+        $description = trim($_POST['description'] ?? '');
+        $progress = (int) ($_POST['progress'] ?? 0);
+
+        if ($title === '' || $status === '' || $description === '') {
+            echo "Tous les champs sont obligatoires.";
+            return;
+        }
+
+        if ($progress < 0 || $progress > 100) {
+            echo "La progression doit être comprise entre 0 et 100.";
+            return;
+        }
+
+        $this->projectModel->update((int) $id, [
+            'title' => $title,
+            'status' => $status,
+            'description' => $description,
+            'progress' => $progress
+        ]);
+
+        header('Location: ' . BASE_URL . '/projects/' . (int) $id);
+        exit;
+    }
 }
