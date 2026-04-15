@@ -19,3 +19,21 @@ INSERT INTO projects (title, status, description, progress) VALUES
 ('Remplacement des fenêtres', 'En attente', 'Commande des nouvelles menuiseries et planification de l’intervention.', 15),
 ('Réfection toiture', 'En cours', 'Remplacement de tuiles abîmées et amélioration de l’étanchéité générale.', 55),
 ('Peinture intérieure complète', 'Terminé', 'Préparation des murs, sous-couche et peinture des pièces principales.', 100);
+
+CREATE TABLE project_updates (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    project_id INT NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_project_updates_project
+        FOREIGN KEY (project_id) REFERENCES projects(id)
+        ON DELETE CASCADE
+);
+
+INSERT INTO project_updates (project_id, title, content) VALUES
+(2, 'Début du chantier', 'Installation de la zone de travail et protection des surfaces.'),
+(2, 'Livraison des matériaux', 'Les premiers matériaux ont été réceptionnés ce matin.'),
+(2, 'Travaux suspendus', 'Le chantier est en attente de validation du choix de faïence.'),
+(3, 'Fin de l’intervention', 'Les travaux électriques sont terminés et validés.');
+
