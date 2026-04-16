@@ -37,3 +37,24 @@ INSERT INTO project_updates (project_id, title, content) VALUES
 (2, 'Travaux suspendus', 'Le chantier est en attente de validation du choix de faïence.'),
 (3, 'Fin de l’intervention', 'Les travaux électriques sont terminés et validés.');
 
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(120) NOT NULL,
+    email VARCHAR(190) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+ALTER TABLE projects ADD COLUMN user_id INT NULL AFTER id;
+
+INSERT INTO users (name, email, password) VALUES
+('Demo User', 'demo@travo.test', '$2y$12$fK6FkVg9h36hkAZ1q33wg.t4HjH0ZyNR33Qwtdv.GcXABAqARIWDW'); -- Password: "password123"
+
+UPDATE projects SET user_id = 1 WHERE user_id IS NULL;
+
+ALTER TABLE projects MODIFY user_id INT NOT NULL;
+
+ALTER TABLE projects
+ADD CONSTRAINT fk_projects_user
+FOREIGN KEY (user_id) REFERENCES users(id)
+ON DELETE CASCADE;
