@@ -13,17 +13,20 @@ require_once __DIR__ . '/../app/Core/Auth.php';
 //Models
 require_once __DIR__ . '/../app/Models/Project.php';
 require_once __DIR__ . '/../app/Models/ProjectUpdate.php';
+require_once __DIR__ . '/../app/Models/User.php';
 
 //Controllers
 require_once __DIR__ . '/../app/Controllers/HomeController.php';
 require_once __DIR__ . '/../app/Controllers/ProjectController.php';
 require_once __DIR__ . '/../app/Controllers/UpdateController.php';
+require_once __DIR__ . '/../app/Controllers/AuthController.php';
 
 //2. On crée un objet routeur.
 $router = new Router();
 $homeController = new HomeController();
 $projectController = new ProjectController();
 $updateController = new UpdateController();
+$authController = new AuthController();
 
 
 //3. On charge le fichier de routes.

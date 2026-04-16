@@ -17,3 +17,10 @@ $router->get('/projects/{id}', [$projectController, 'show']);
 $router->get('/projects/{id}/updates', [$updateController, 'index']);
 $router->get('/projects/{id}/updates/create', [$updateController, 'create']);
 $router->post('/projects/{id}/updates/store', [$updateController, 'store']);
+
+// Routes pour la connexion et l'inscription
+$router->get('/register', [$authController, 'showRegister']);
+$router->post('/register', [$authController, 'register']);
+$router->get('/login', [$authController, 'showLogin']);
+$router->post('/login', [$authController, 'login']);
+$router->get('/logout', [$authController, 'logout']);

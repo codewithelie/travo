@@ -63,6 +63,21 @@ class Validator
                 }
                 break;
 
+            case 'email':
+                if (trim((string) $value) !== '' && !filter_var(trim((string) $value), FILTER_VALIDATE_EMAIL)) {
+                    $this->errors[$field] = "L’adresse email est invalide.";
+                }
+                break;
+
+            case 'confirmed':
+                $confirmationField = $field . '_confirmation';
+                $confirmationValue = $this->data[$confirmationField] ?? null;
+
+                if ((string) $value !== (string) $confirmationValue) {
+                    $this->errors[$field] = "La confirmation du champ {$field} ne correspond pas.";
+                }
+                break;
+
             case 'in':
                 $allowed = $params;
                 if (trim((string) $value) !== '' && !in_array((string) $value, $allowed, true)) {
@@ -83,6 +98,27 @@ class Validator
 
                 if ($number < $min || $number > $max) {
                     $this->errors[$field] = "Le champ {$field} doit être compris entre {$min} et {$max}.";
+                }
+                break;
+
+            case 'unique':
+                $table = $params[0] ?? null;
+                $column = $params[1] ?? $field;
+
+                if ($table && $column && trim((string) $value) !== '') {
+                    $pdo = Database::getConnection();
+
+                    $sql = "SELECT COUNT(*) FROM {$table} WHERE {$column} = :value";
+                    $stmt = $pdo->prepare($sql);
+                    $stmt->execute([
+                        'value' => trim((string) $value)
+                    ]);
+
+                    $count = (int) $stmt->fetchColumn();
+
+                    if ($count > 0) {
+                        $this->errors[$field] = "Cette valeur pour {$field} est déjà utilisée.";
+                    }
                 }
                 break;
         }
