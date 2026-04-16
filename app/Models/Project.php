@@ -94,4 +94,15 @@ class Project {
             'id' => $id
         ]);
     }
+
+    public function countByUserId(int $userId): int
+    {
+        $sql = "SELECT COUNT(*) FROM projects WHERE user_id = :user_id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([
+            'user_id' => $userId,
+        ]);
+
+        return (int) $stmt->fetchColumn();
+    }
 }

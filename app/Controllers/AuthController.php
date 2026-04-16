@@ -3,10 +3,12 @@
 class AuthController extends Controller
 {
     private User $userModel;
+    private Project $projectModel;
 
     public function __construct()
     {
         $this->userModel = new User();
+        $this->projectModel = new Project();
     }
 
     public function showRegister(): void
@@ -84,5 +86,24 @@ class AuthController extends Controller
         Auth::logout();
         Notification::setFlash('success', 'Déconnexion réussie.');
         $this->redirect('/login');
+    }
+
+    public function account(): void
+    {
+        $userId = $this->requireAuth();
+        $user = $this->userModel->findById((int) $userId);
+        $projectCount = $this->projectModel->countByUserId($userId);
+
+        if (!$user) {
+            http_response_code(404);
+            echo "<h1>Utilisateur introuvable</h1>";
+            return;
+        }
+
+        $this->view('auth/account', [
+            'user' => $user,
+            'projectCount' => $projectCount,
+        ]);
+
     }
 }

@@ -14,6 +14,7 @@
             <nav class="flex items-center gap-4 text-sm font-medium">
                 <?php if (Auth::check()): ?>
                     <a href="<?php echo BASE_URL; ?>/projects" class="transition hover:text-blue-200">Mes chantiers</a>
+                    <a href="<?php echo BASE_URL; ?>/account" class="transition hover:text-blue-200">Mon compte</a>
                     <span class="text-blue-100">
                         Bonjour <?php echo htmlspecialchars(Auth::user()['name']); ?>
                     </span>
